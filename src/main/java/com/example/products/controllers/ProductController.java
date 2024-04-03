@@ -31,30 +31,30 @@ public class ProductController {
     @GetMapping("/products/categories")
     public List<Category> getAllCategories(){
 
-        return new ArrayList<>();
+        return productService.getAllPCategories();
     }
 
     @GetMapping("/products/category/{id}")
-    public List<Product> getAllProductsInCategory(@PathVariable("id") Long id){
+    public List<Product> getAllProductsInCategory(@PathVariable("id") String id){
 
-        return new ArrayList<>();
+        return productService.getProductsByCategory(id);
     }
 
-    @PostMapping("/products")
-    public Product addProduct(@RequestBody ProductRequestDto requestDto){
-        return new Product();
-    }
-
-    @PatchMapping("/products/{id}")
-    public Product updateProduct(@PathVariable("id") Long id,
-                                 @RequestBody ProductRequestDto requestDto){
-        return new Product();
-    }
-
-    @DeleteMapping("/products/{id}")
-    public boolean deleteProduct(@PathVariable("id") Long id){
-        return true;
-    }
+//    @PostMapping("/products")
+//    public Product addProduct(@RequestBody ProductRequestDto requestDto){
+//        return new Product();
+//    }
+//
+//    @PatchMapping("/products/{id}")
+//    public Product updateProduct(@PathVariable("id") Long id,
+//                                 @RequestBody ProductRequestDto requestDto){
+//        return new Product();
+//    }
+//
+//    @DeleteMapping("/products/{id}")
+//    public boolean deleteProduct(@PathVariable("id") Long id){
+//        return true;
+//    }
 
 
 }

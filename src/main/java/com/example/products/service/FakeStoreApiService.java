@@ -26,6 +26,37 @@ public class FakeStoreApiService implements IProductService{
     }
 
     @Override
+    public List<Category> getAllPCategories() {
+        String [] categories = restTemplate.getForObject(
+                "https://fakestoreapi.com/products/categories",
+                String[].class);
+        List<Category> output = new ArrayList<>();
+        if (categories != null) {
+            for (String category : categories) {
+                Category category1 = new Category();
+                category1.setId((long) category.hashCode());
+                category1.setName(category);
+                output.add(category1);
+            }
+        }
+        return output;
+    }
+
+    @Override
+    public List<Product> getProductsByCategory(String id) {
+        ProductResponseDto[] categories = restTemplate.getForObject(
+                "https://fakestoreapi.com/products/category/" + id,
+                ProductResponseDto[].class);
+        List<Product> output = new ArrayList<>();
+        if (categories != null) {
+            for (ProductResponseDto category : categories) {
+                output.add(getProductFromResponseDTO(category));
+            }
+        }
+        return output;
+    }
+
+    @Override
     public List<Product> getAllProducts() {
         ProductResponseDto[] products = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/",
