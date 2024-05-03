@@ -1,0 +1,1 @@
+alter table product rename column description to descr;
