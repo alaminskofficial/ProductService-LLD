@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ProductController {
@@ -25,7 +26,10 @@ public class ProductController {
     @GetMapping("/products")
     public List<Product> getAllProducts(){
         // getting from 3rd party api's And add the data to the database
-        return productService.getAllProducts();
+        return productService.getAllProducts()
+                .stream()
+                .filter(product -> product.getName().startsWith("S"))
+                .collect(Collectors.toList());
     }
     @GetMapping("/products/search")
     public Product getProductsByName(@RequestParam("name") String name){
