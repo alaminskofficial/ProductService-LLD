@@ -8,6 +8,7 @@ import com.example.products.models.Product;
 import com.example.products.repositories.CategoryRepository;
 import com.example.products.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,20 +25,27 @@ public class FakeStoreApiService implements IProductService{
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
     @Override
     public Product getSingleProduct(Long id) throws ProductNotPresentException {
-        if(id>20 && id<=40){
-            throw new ProductNotPresentException();
-        }
-        if(id>40){
-            throw new ArithmeticException();
-        }
+        if(redisTemplate.opsForHash().hasKey(id,"product_"+id) == false){
+            if(id>20 && id<=40){
+                throw new ProductNotPresentException();
+            }
+            if(id>40){
+                throw new ArithmeticException();
+            }
 
-        ProductResponseDtoFake response = restTemplate.getForObject(
-                "https://fakestoreapi.com/products/" + id,
-                ProductResponseDtoFake.class);
+            ProductResponseDtoFake response = restTemplate.getForObject(
+                    "https://fakestoreapi.com/products/" + id,
+                    ProductResponseDtoFake.class);
 
-        return getProductFromResponseDTO(response);
+            redisTemplate.opsForHash().put(id , "product_" + id  , getProductFromResponseDTO(response));
+
+        }
+        return (Product) redisTemplate.opsForHash().get(id , "product_" + id);
     }
 
     @Override
