@@ -14,23 +14,29 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class FakeStoreApiService implements IProductService{
     @Autowired
     RestTemplate restTemplate;
-
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
     ProductRepository productRepository;
-
     @Autowired
     RedisTemplate redisTemplate;
+    private static final long GLOBAL_EXPIRATION_TIME = 60; // in minutes
+
+    private void cacheValueWithGlobalExpiry(String key, Object value) {
+        redisTemplate.opsForHash().put(key, "hash_key" ,value);
+        redisTemplate.expire(key, GLOBAL_EXPIRATION_TIME, TimeUnit.MINUTES);
+    }
 
     @Override
     public Product getSingleProduct(Long id) throws ProductNotPresentException {
-        if(redisTemplate.opsForHash().hasKey(id,"product_"+id) == false){
+        String key = "product_" + id;
+        if(!redisTemplate.opsForHash().hasKey(key , key)){
             if(id>20 && id<=40){
                 throw new ProductNotPresentException();
             }
@@ -42,10 +48,10 @@ public class FakeStoreApiService implements IProductService{
                     "https://fakestoreapi.com/products/" + id,
                     ProductResponseDtoFake.class);
 
-            redisTemplate.opsForHash().put(id , "product_" + id  , getProductFromResponseDTO(response));
-
+            Product product = getProductFromResponseDTO(response);
+            cacheValueWithGlobalExpiry(key, product);
         }
-        return (Product) redisTemplate.opsForHash().get(id , "product_" + id);
+        return (Product) redisTemplate.opsForHash().get(key,key);
     }
 
     @Override
