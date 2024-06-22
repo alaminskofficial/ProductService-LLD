@@ -22,6 +22,11 @@ public class ProductController {
     IProductService productService;
     @Autowired
     ProductRepository productRepository;
+    @GetMapping("/product")
+    public String doNothing(){
+        System.out.println("request received at product service");
+        return "Hello, From Product service";
+    }
 
     @GetMapping("/products")
     public List<Product> getAllProducts(){
