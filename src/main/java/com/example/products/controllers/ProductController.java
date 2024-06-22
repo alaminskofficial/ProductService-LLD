@@ -8,6 +8,9 @@ import com.example.products.models.Product;
 import com.example.products.repositories.ProductRepository;
 import com.example.products.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,10 @@ public class ProductController {
     public String doNothing(){
         System.out.println("request received at product service");
         return "Hello, From Product service";
+    }
+    @GetMapping("/getproducts")
+    public List<Product> getProducts(@RequestParam("pageNo") String pageNo ,@RequestParam("pageSize") String pageSize){
+        return productRepository.findAll(PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize)), Sort.by("price"));
     }
 
     @GetMapping("/products")

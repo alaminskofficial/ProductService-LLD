@@ -1,5 +1,6 @@
 package com.example.products.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -19,5 +20,6 @@ public class Product extends BaseModel implements Serializable {
     private float price;
 
     @ManyToOne
+    @JsonIgnore
     private Category category;
 }
