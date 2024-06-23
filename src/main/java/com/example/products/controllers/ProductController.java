@@ -31,8 +31,12 @@ public class ProductController {
         return "Hello, From Product service";
     }
     @GetMapping("/getproducts")
-    public List<Product> getProducts(@RequestParam("pageNo") String pageNo ,@RequestParam("pageSize") String pageSize){
-        return productRepository.findAll(PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize)), Sort.by("price"));
+    public ResponseEntity<?> getProducts(@RequestParam("pageNo") String pageNo ,@RequestParam("pageSize") String pageSize){
+        Page<Product> products = productRepository.findAll(PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize) ,Sort.by("price")));
+        if (products.isEmpty()) {
+            return new ResponseEntity<>("No products found for the given page.", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @GetMapping("/products")
