@@ -5,6 +5,7 @@ import com.example.products.models.ProductReview;
 import com.example.products.repositories.ReviewRepository;
 import com.example.products.service.GridFSService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -42,19 +43,18 @@ public class ReviewController {
     @PostMapping("/products/{productId}/reviews")
     public ResponseEntity<ProductReview> addReview(
             @PathVariable String productId,
-            //@RequestParam("reviewRequest") String  request,
+            @RequestParam("reviewRequest") String  request,
             @RequestParam("file") MultipartFile file) throws IOException {
 
         // Convert JSON string to ProductReviewRequest object
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        ProductReviewRequest reviewRequest = objectMapper.readValue(request, ProductReviewRequest.class);
-
+        Gson gson = new Gson();
+        ProductReviewRequest reviewRequest = gson.fromJson(request, ProductReviewRequest.class);
         ProductReview review = new ProductReview();
         review.setProductId(productId);
-//        review.setUsername(reviewRequest.getUsername());
-//        review.setRating(reviewRequest.getRating());
-//        review.setComment(reviewRequest.getComment());
-//        review.setAdditionalDetails(reviewRequest.getAdditionalDetails());
+        review.setUsername(reviewRequest.getUsername());
+        review.setRating(reviewRequest.getRating());
+        review.setComment(reviewRequest.getComment());
+        review.setAdditionalDetails(reviewRequest.getAdditionalDetails());
 
         // Store image in GridFS
         String imageFileId = gridFSService.storeFile(file);
