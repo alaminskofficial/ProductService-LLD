@@ -60,6 +60,12 @@ GET /products/category/{id}: Returns a list of all products in the given categor
 
 POST /products: Adds a new product.
 
+GET /products/{productId}/reviews : to retrieve reviews for a product
+
+POST /products/{productId}/reviews : add a review with image upload Using MongoDB GridFS 
+
+GET /image/{fileId} : to download the review image
+
 
 **Built With**
 Java
