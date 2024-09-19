@@ -13,6 +13,6 @@ public class ProductReviewRequest {
     private String username;
     private int rating;
     private String comment;
-    private Map<String, Object> additionalDetails; // Extra fields
+    private Map<String, Object> additionalDetails;//for additional extra fields
     private String timestamp;
 }
