@@ -1,6 +1,7 @@
 # Product Management System
+The Ecommerce Products and Services program is designed to provide a robust and scalable solution for managing products in online marketplaces. This service enables key operations such as listing, adding, editing, and deleting products. It ensures seamless integration with existing ecommerce platforms. with automated and streamlined product management This project addresses critical needs for operational efficiency. Better accuracy and faster product deployment in the competitive e-commerce sector.
 
-This is a product management system built using Java, SQL, Spring Boot, and Maven.
+This is a product management system built using Java, SQL,NoSQL Spring Boot and Maven.
 
 ## Getting Started
 
